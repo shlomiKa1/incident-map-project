@@ -2,7 +2,7 @@ import { MongoClient, Db } from "mongodb";
 import { URI_MONGO } from "../config.js";
 
 const client = new MongoClient(URI_MONGO);
-let /**@type {Db}*/ db;
+let /**@type {Db | null}*/ db;
 
 export function connectToMongo() {
   if (!db) {
