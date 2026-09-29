@@ -4,16 +4,28 @@ import { URI_MONGO } from "../config.js";
 const client = new MongoClient(URI_MONGO);
 let /**@type {Db}*/ db;
 
-export async function connectToMongo() {
+export function connectToMongo() {
   if (!db) {
-    try {
-      await client.connect();
-      db = client.db("space-incident");
-      console.log("Connected to mongoDB...");
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  } else {
-    console.log("Already connected to MongoDB...");
+    db = client
+      .connect()
+      .then(() => {
+        console.log("Connected to mongoDB: space-incident");
+        return client.db("space-incident");
+      })
+      .catch((error) => {
+        db = null;
+        throw new Error("Failed to connect to MongoDB", { cause: error });
+      });
   }
+  return db;
+}
+
+export async function closeMongo() {
+  try {
+    await client.close();
+    db = null;
+  } catch {
+    console.log("Failed at close");
+  }
+  console.log("MongoDb closed success");
 }
