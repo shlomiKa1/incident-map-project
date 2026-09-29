@@ -6,7 +6,7 @@ const emailField = z
   .toLowerCase()
   .pipe(z.email("Invalid email"));
 
-export const registerSchema = z.object({
+export const userSchema = z.object({
   email: emailField,
   password: z.string().min(8, "Password must be at least 8 characters"),
 });

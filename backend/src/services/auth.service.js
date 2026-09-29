@@ -7,7 +7,7 @@ import { HASH_ROUNDS } from "../config.js";
 export function createAuthService(userRepo) {
   function buildAuthResponse(doc) {
     const user = toUserDto(doc);
-    return { user, token: generateToken({ id: user.id, role: user.role }) };
+    return { user, token: generateToken(user) };
   }
 
   async function register({ email, password }) {
