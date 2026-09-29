@@ -37,5 +37,14 @@ export function createAuthService(userRepo) {
     return buildAuthResponse(doc);
   }
 
-  return { register, login };
+  async function me(userId) {
+    const doc = await userRepo.findOne(userId);
+
+    if (!doc) {
+      throw new AppError(401, "User not found");
+    }
+    return toUserDto(doc);
+  }
+
+  return { register, login, me };
 }
