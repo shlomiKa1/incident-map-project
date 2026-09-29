@@ -1,16 +1,16 @@
 import { MongoClient, Db } from "mongodb";
-import { URI_MONGO } from "../config.js";
+import { DB_NAME, URI_MONGO } from "../config.js";
 
 const client = new MongoClient(URI_MONGO);
-let /**@type {Db | null}*/ db;
+let /**@type {Promise<Db> | null}*/ db;
 
 export function connectToMongo() {
   if (!db) {
     db = client
       .connect()
       .then(() => {
-        console.log("Connected to mongoDB: space-incident");
-        return client.db("space-incident");
+        console.log(`Connected to mongoDB: ${DB_NAME}`);
+        return client.db(DB_NAME);
       })
       .catch((error) => {
         db = null;
@@ -20,12 +20,17 @@ export function connectToMongo() {
   return db;
 }
 
+export async function ensureIndexes() {
+  const db = await connectToMongo();
+  await db.collection("users").createIndex({ email: 1 }, { unique: true });
+}
+
 export async function closeMongo() {
   try {
     await client.close();
     db = null;
-  } catch {
-    console.log("Failed at close");
+    console.log("MongoDb closed success");
+  } catch (err) {
+    console.log("Failed at close", err.message);
   }
-  console.log("MongoDb closed success");
 }
