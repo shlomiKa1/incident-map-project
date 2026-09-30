@@ -19,7 +19,6 @@ export const createIncident = z.object({
 
 export const updateIncident = createIncident.partial().extend({
   createdBy: idSchema,
-  createdAt: z.date(),
 });
 
 export const QuerySchema = z
