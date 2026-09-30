@@ -31,7 +31,7 @@ export default function createIncidentSerivce(incidentRepo) {
 
   async function remove(id) {
     await findIncidentById(id);
-    return toIncidentDto(await incidentRepo.remove(id));
+    return await incidentRepo.remove(id);
   }
 
   return { findIncidents, findIncidentById, insertIncident, update, remove };
