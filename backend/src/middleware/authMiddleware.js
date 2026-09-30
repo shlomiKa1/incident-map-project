@@ -2,26 +2,29 @@ import jwt from "jsonwebtoken";
 import { SECRET_JWT } from "../config.js";
 import { AppError } from "../utils/AppError.js";
 
-export function authMiddleware(req, _res, next) {
-  try {
-    // const authHeader = req.headers.authorization;
-    // console.log("Auth Header from client:", authHeader);
-
+export function authMiddleware(...roles) {
+  return function (req, _res, next) {
     const token = req.cookies.token;
     if (!token) {
-      return next(new AppError(401, "Invalid credentials"));
+      return next(new AppError(401, "missing token"));
     }
 
-    const user = jwt.verify(token, SECRET_JWT);
+    let payload;
+    try {
+      // const authHeader = req.headers.authorization;
+      // console.log("Auth Header from client:", authHeader);
 
-    if (!user) {
-      return next(new AppError(403, "Who are you?"));
+      payload = jwt.verify(token, SECRET_JWT);
+    } catch (error) {
+      console.error("JWT Verification Error Details:", error.message); // <-- הוסף את זה
+      return next(new AppError(401, "Invalid or expired token"));
     }
 
-    req.user = user;
+    req.user = payload;
+
+    if (roles.length > 0 && !roles.includes(req.user.role)) {
+      return next(new AppError(403, "Forbidden"));
+    }
     next();
-  } catch (error) {
-    console.error("JWT Verification Error Details:", error.message); // <-- הוסף את זה
-    return next(new AppError(401, "Invalid or expired token"));
-  }
+  };
 }
