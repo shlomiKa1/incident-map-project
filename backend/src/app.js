@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 import { errorHandler } from "./middleware/error.handler.js";
 import { logger } from "./middleware/logger.js";
 import { CLIENT_ORIGIN } from "./config.js";
 import createAuthRouter from "./routes/auth.route.js";
 import createIncidentsRouter from "./routes/incidents.route.js";
-import { authMiddleware } from "./middleware/authMiddleware.js";
 
 export function createApp({ authController, incidentsCtrl, incidentsRepo }) {
   const app = express();
@@ -14,6 +14,7 @@ export function createApp({ authController, incidentsCtrl, incidentsRepo }) {
   app.use(express.json());
   app.use(cors({ origin: CLIENT_ORIGIN }));
   app.use(cookieParser());
+  app.use(helmet());
 
   app.use(logger);
 
