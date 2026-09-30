@@ -8,11 +8,16 @@ import createAuthController from "./controllers/auth.conroller.js";
 import createIncidentsCtrl from "./controllers/incident.controller.js";
 import createIncidentSerivce from "./services/incident.service.js";
 import createIncidentsDAL from "./DAL/incidents.dal.js";
+import { createIncidentNotifer, initSocket } from "./utils/socket.js";
 
 const start = async () => {
   try {
     await connectToMongo();
     await ensureIndexes();
+
+    const server = http.createServer();
+    const io = initSocket();
+    const incidentNotifier = createIncidentNotifer(io);
 
     const userRepo = await createUserDAL();
     const authService = createAuthService(userRepo);
@@ -20,10 +25,14 @@ const start = async () => {
 
     const incidentsRepo = await createIncidentsDAL();
     const incidentsService = createIncidentSerivce(incidentsRepo);
-    const incidentsCtrl = createIncidentsCtrl(incidentsService);
+    const incidentsCtrl = createIncidentsCtrl(
+      incidentsService,
+      incidentNotifier,
+    );
 
-    const app = createApp({ authController, incidentsCtrl });
-    const server = http.createServer(app);
+    const app = createApp({ authController, incidentsCtrl, incidentsRepo });
+    server.on("request", app);
+
     server.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
   } catch (err) {
     console.log("Failed to start:", err);

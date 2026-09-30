@@ -8,7 +8,7 @@ import createAuthRouter from "./routes/auth.route.js";
 import createIncidentsRouter from "./routes/incidents.route.js";
 import { authMiddleware } from "./middleware/authMiddleware.js";
 
-export function createApp({ authController, incidentsCtrl }) {
+export function createApp({ authController, incidentsCtrl, incidentsRepo }) {
   const app = express();
 
   app.use(express.json());
@@ -22,7 +22,7 @@ export function createApp({ authController, incidentsCtrl }) {
   });
 
   app.use("/auth", createAuthRouter(authController));
-  app.use("/incidents", authMiddleware, createIncidentsRouter(incidentsCtrl));
+  app.use("/incidents", createIncidentsRouter(incidentsCtrl, incidentsRepo));
 
   app.use((_req, res) => {
     res.status(404).send({ success: false, message: "Route not found" });
