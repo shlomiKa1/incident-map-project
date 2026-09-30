@@ -8,3 +8,9 @@ export const {
 } = process.env;
 
 export const HASH_ROUNDS = 12;
+
+export const SOCKET_EVENTS = {
+  INCIDENT_CREATED: "incident:created",
+  INCIDENT_UPDATED: "incident:updated",
+  INCIDENT_DELETED: "incident:deleted",
+};
