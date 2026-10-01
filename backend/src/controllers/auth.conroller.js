@@ -20,7 +20,7 @@ export default function createAuthController(authService) {
   }
 
   async function me(req, res) {
-    res.send({ user: req.user });
+    res.send(req.user);
   }
 
   return { register, login, me };
