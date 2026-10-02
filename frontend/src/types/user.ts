@@ -8,8 +8,8 @@ export interface User {
   createdAt: string;
 }
 
-export interface AuthResponse extends User {
-  id: string;
-  role: Role;
-  createdAt: string;
-}
+// export interface AuthResponse extends User {
+//   id: string;
+//   role: Role;
+//   createdAt: string;
+// }
