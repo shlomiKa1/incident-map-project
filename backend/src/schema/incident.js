@@ -12,7 +12,6 @@ export const createIncident = z.object({
   title: z.string().trim().min(4).max(25, "Maximum 25 characters"),
   description: z.string().trim().min(4),
   category: category,
-  status: status,
   location: z.object({
     lat: z.number().min(-90).max(90),
     lng: z.number().min(-180).max(180),
@@ -20,7 +19,7 @@ export const createIncident = z.object({
 });
 
 export const updateIncident = createIncident.partial().extend({
-  createdBy: idSchema,
+  status: status.optional(),
 });
 
 export const QuerySchema = z
