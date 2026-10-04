@@ -15,23 +15,22 @@ const start = async () => {
     await connectToMongo();
     await ensureIndexes();
 
-    const server = http.createServer();
-    const io = initSocket();
-    const incidentNotifier = createIncidentNotifer(io);
-
+    const incidentNotifier = createIncidentNotifer();
+    
     const userRepo = await createUserDAL();
     const authService = createAuthService(userRepo);
     const authController = createAuthController(authService);
-
+    
     const incidentsRepo = await createIncidentsDAL();
     const incidentsService = createIncidentSerivce(incidentsRepo);
     const incidentsCtrl = createIncidentsCtrl(
       incidentsService,
       incidentNotifier,
     );
-
+    
     const app = createApp({ authController, incidentsCtrl, incidentsRepo });
-    server.on("request", app);
+    const server = http.createServer(app);
+    initSocket(server);
 
     server.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
   } catch (err) {
