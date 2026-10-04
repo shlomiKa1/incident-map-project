@@ -1,9 +1,9 @@
 export const {
-  URI_MONGO,
-  DB_NAME,
+  URI_MONGO = "mongodb://mongo:27017",
+  DB_NAME = "incident",
   PORT = 3000,
   CLIENT_ORIGIN = "http://localhost:5173",
-  SECRET_JWT = "Enter_your_secret_T",
+  SECRET_JWT,
   EXPIRE_JWT = "1d",
 } = process.env;
 
