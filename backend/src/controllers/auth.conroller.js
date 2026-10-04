@@ -23,5 +23,10 @@ export default function createAuthController(authService) {
     res.send({ success: true, data: { user } });
   }
 
-  return { register, login, me };
+  function logout(_req, res) {
+    res.clearCookie("token");
+    res.send({ success: true, data: null });
+  }
+
+  return { register, login, me, logout };
 }
