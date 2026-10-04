@@ -1,0 +1,5 @@
+node_modules
+.env
+package-lock.json
+space-incident-detail.md
+CONTRACT.md
