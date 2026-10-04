@@ -12,7 +12,7 @@ export function createApp({ authController, incidentsCtrl, incidentsRepo }) {
   const app = express();
 
   app.use(express.json());
-  app.use(cors({ origin: CLIENT_ORIGIN }));
+  app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
   app.use(cookieParser());
   app.use(helmet());
 
