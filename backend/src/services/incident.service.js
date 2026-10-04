@@ -18,7 +18,12 @@ export default function createIncidentSerivce(incidentRepo) {
   }
 
   async function insertIncident(data) {
-    const incident = { ...data, createdAt: new Date(), updatedAt: null };
+    const incident = {
+      ...data,
+      status: "open",
+      createdAt: new Date(),
+      updatedAt: null,
+    };
     return toIncidentDto(await incidentRepo.insertOne(incident));
   }
 
