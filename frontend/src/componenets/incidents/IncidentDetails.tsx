@@ -94,6 +94,12 @@ const IncidentDetails = ({
         Updated at: <strong>{getTimeAndDate(incident.updatedAt)}</strong>
       </p>
 
+      <p>
+        Created by:{" "}
+        <strong>
+          {incident.createdBy === user?.id ? "Me" : `Anthor user`}
+        </strong>
+      </p>
       {error && <p role="alert">{error}</p>}
     </div>
   );
