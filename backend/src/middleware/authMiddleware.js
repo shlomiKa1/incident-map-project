@@ -11,12 +11,8 @@ export function authMiddleware(...roles) {
 
     let payload;
     try {
-      // const authHeader = req.headers.authorization;
-      // console.log("Auth Header from client:", authHeader);
-
       payload = jwt.verify(token, SECRET_JWT);
     } catch (error) {
-      console.error("JWT Verification Error Details:", error.message); // <-- הוסף את זה
       return next(new AppError(401, "Invalid or expired token"));
     }
 
